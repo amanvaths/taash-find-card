@@ -96,9 +96,7 @@ test.describe('deployed production smoke', () => {
 
 	test('favicon and static assets', async ({ page, request }) => {
 		const base = LIVE_URL.replace(/\/$/, '');
-		for (const path of ['/favicon.ico', '/textures/card-back.svg', '/_headers']) {
-			// _headers may not be publicly fetchable as a document on CF; favicon + texture must be.
-			if (path === '/_headers') continue;
+		for (const path of ['/favicon.ico', '/textures/card-back.svg']) {
 			const res = await request.get(`${base}${path}`);
 			expect(res.status(), path).toBe(200);
 		}

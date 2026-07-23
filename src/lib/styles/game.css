@@ -397,7 +397,7 @@ button {
 		min-height: min(100dvh - 2 * var(--space-4), 52rem);
 		max-height: calc(100dvh - 2 * var(--space-4));
 		border-radius: 1.35rem;
-		border: 1px solid color-mix(in srgb, var(--color-border) 70%, #3a5a4a);
+		border: 1px solid color-mix(in srgb, var(--color-border) 70%, #a85a28);
 		box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.45);
 	}
 }

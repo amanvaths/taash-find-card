@@ -1,23 +1,23 @@
 :root {
-	--color-table: #1a3d2e;
-	--color-table-deep: #123026;
-	--color-table-edge: #0c2119;
-	--color-felt-line: #24553f;
+	--color-table: #3d2410;
+	--color-table-deep: #2a180c;
+	--color-table-edge: #1a0e08;
+	--color-felt-line: #c46828;
 	--color-card-face: #f7f4ef;
-	--color-card-back: #1f3a5f;
-	--color-card-back-pattern: #2d5080;
+	--color-card-back: #0a0a0a;
+	--color-card-back-pattern: #1f1f1f;
 	--color-ink: #1a1a1a;
 	--color-ink-muted: #5a5a5a;
 	--color-suit-red: #b42318;
 	--color-suit-black: #141414;
 	--color-focus-ring: #e8b84a;
-	--color-hud: #0f241c;
+	--color-hud: #2a180c;
 	--color-hud-text: #f2efe8;
 	--color-win: #2f6b3a;
 	--color-lose: #8a2f2f;
 	--color-correct-glow: #d4a017;
-	--color-border: #0a1a14;
-	--color-overlay: rgba(8, 18, 14, 0.72);
+	--color-border: #1a0e08;
+	--color-overlay: rgba(20, 10, 4, 0.72);
 
 	--radius-card: 0.55rem;
 	--radius-panel: 0.75rem;

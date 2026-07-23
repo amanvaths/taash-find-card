@@ -48,12 +48,6 @@ export const SUIT_LABELS = /** @type {const} */ ({
 	clubs: 'Clubs'
 });
 
-/** Gameplay board includes one wild joker alongside the target suit's 13 cards. */
-export const JOKER_CARD_ID = 'joker';
-
-/** Face-down board layout: 6 rows totaling 14 (13 suit + joker). */
-export const BOARD_ROW_SIZES = /** @type {const} */ ([1, 3, 3, 3, 3, 1]);
-
 export const RANK_LABELS = /** @type {const} */ ({
 	A: 'Ace',
 	2: '2',

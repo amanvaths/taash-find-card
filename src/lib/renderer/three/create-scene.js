@@ -44,7 +44,7 @@ export function createScene(container) {
 
 	const tableGeometry = new THREE.CircleGeometry(7.5, 64);
 	const tableMaterial = new THREE.MeshStandardMaterial({
-		color: 0x1a3d2e,
+		color: 0x3d2410,
 		roughness: 0.85,
 		metalness: 0.05
 	});
@@ -55,7 +55,7 @@ export function createScene(container) {
 
 	const rimGeometry = new THREE.RingGeometry(7.5, 7.85, 64);
 	const rimMaterial = new THREE.MeshStandardMaterial({
-		color: 0x0c2119,
+		color: 0x1a0e08,
 		roughness: 0.7,
 		metalness: 0.1,
 		side: THREE.DoubleSide
