@@ -68,7 +68,8 @@ CSP post-build: `scripts/apply-csp-hashes.js` hashes SvelteKit’s required inli
 
 ## CI
 
-GitHub Actions workflow: `.github/workflows/ci.yml`
+GitHub Actions workflow: `.github/workflows/ci.yml`  
+Repository: https://github.com/amanvaths/taash-find-card
 
 Runs on push/PR to `main`:
 
@@ -79,6 +80,8 @@ Runs on push/PR to `main`:
 5. `npm run test:unit -- --run`
 6. `npm run build`
 7. Playwright Chromium smoke (`npx playwright test --project=chromium`)
+
+Latest green CI: https://github.com/amanvaths/taash-find-card/actions/runs/30044891917
 
 ## Production smoke (executed)
 
