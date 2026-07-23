@@ -1,6 +1,6 @@
-import { parseCardId } from './cards.js';
-import { MODES, PHASES, RESULTS, SUITS } from './constants.js';
-import { createDeck, validateDeck } from './deck.js';
+import { isJoker, parseCardId } from './cards.js';
+import { JOKER_CARD_ID, MODES, PHASES, RESULTS, SUITS } from './constants.js';
+import { createDeck, validateDeck, validatePlayBoard } from './deck.js';
 import { createSeededRandomInt, secureRandomInt, seededShuffle, secureShuffle } from './random.js';
 import { assertTransition, canSelectCard } from './state-machine.js';
 
@@ -59,27 +59,34 @@ function shuffleFor(items, seed) {
 }
 
 /**
- * Classic mode: shuffle 13 ranks independently inside each suit.
+ * Classic board: only the hint/target suit's 13 cards + one joker (14 total).
  * @param {string[]} deck
+ * @param {string} targetCardId
  * @param {number | null | undefined} seed
  * @returns {SuitGroup[]}
  */
-function buildClassicGroups(deck, seed) {
-	/** @type {Record<string, string[]>} */
-	const bySuit = Object.fromEntries(SUITS.map((suit) => [suit, []]));
-
-	for (const id of deck) {
-		const { suit } = parseCardId(id);
-		bySuit[suit].push(id);
+function buildTargetSuitBoard(deck, targetCardId, seed) {
+	const { suit } = parseCardId(targetCardId);
+	if (isJoker(targetCardId) || suit === 'joker') {
+		throw new Error('Target cannot be the joker');
 	}
 
-	return SUITS.map((suit, index) => {
-		const suitSeed = seed === null || seed === undefined ? null : seed + index + 1;
-		return {
-			suit,
-			cardIds: shuffleFor(bySuit[suit], suitSeed)
-		};
+	const suitCards = deck.filter((id) => {
+		const parsed = parseCardId(id);
+		return !isJoker(id) && parsed.suit === suit;
 	});
+
+	if (suitCards.length !== 13) {
+		throw new Error(`Expected 13 ${suit} cards, got ${suitCards.length}`);
+	}
+
+	const boardSeed = seed === null || seed === undefined ? null : seed + SUITS.indexOf(suit) + 1;
+	return [
+		{
+			suit,
+			cardIds: shuffleFor([...suitCards, JOKER_CARD_ID], boardSeed)
+		}
+	];
 }
 
 /**
@@ -97,14 +104,19 @@ export function createRound(options = {}) {
 	const randomInt = randomIntFor(seed);
 
 	const deck = createDeck();
+	const deckValidation = validateDeck(deck);
+	if (!deckValidation.ok) {
+		throw new Error(`Invalid source deck: ${deckValidation.errors.join('; ')}`);
+	}
+
 	const targetIndex = randomInt(deck.length);
 	const targetCardId = deck[targetIndex];
-	const groups = buildClassicGroups(deck, seed);
+	const groups = buildTargetSuitBoard(deck, targetCardId, seed);
 
 	const flat = groups.flatMap((group) => group.cardIds);
-	const validation = validateDeck(flat, targetCardId);
+	const validation = validatePlayBoard(flat, targetCardId);
 	if (!validation.ok) {
-		throw new Error(`Invalid round deck: ${validation.errors.join('; ')}`);
+		throw new Error(`Invalid play board: ${validation.errors.join('; ')}`);
 	}
 
 	roundCounter += 1;
@@ -154,7 +166,8 @@ export function selectCard(round, cardId, options = {}) {
 	}
 
 	const now = options.now ?? Date.now();
-	const won = cardId === round.targetCardId;
+	// Joker is never the target — tapping it always loses.
+	const won = !isJoker(cardId) && cardId === round.targetCardId;
 
 	/** @type {Round} */
 	let next = {

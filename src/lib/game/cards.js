@@ -1,4 +1,4 @@
-import { RANKS, RANK_LABELS, SUITS, SUIT_LABELS } from './constants.js';
+import { JOKER_CARD_ID, RANKS, RANK_LABELS, SUITS, SUIT_LABELS } from './constants.js';
 
 /**
  * @param {import('./constants.js').Suit} suit
@@ -11,9 +11,21 @@ export function cardId(suit, rank) {
 
 /**
  * @param {string} id
- * @returns {{ suit: import('./constants.js').Suit, rank: import('./constants.js').Rank }}
+ * @returns {boolean}
+ */
+export function isJoker(id) {
+	return id === JOKER_CARD_ID;
+}
+
+/**
+ * @param {string} id
+ * @returns {{ suit: import('./constants.js').Suit, rank: import('./constants.js').Rank } | { suit: 'joker', rank: 'JOKER' }}
  */
 export function parseCardId(id) {
+	if (isJoker(id)) {
+		return { suit: 'joker', rank: 'JOKER' };
+	}
+
 	const separator = id.lastIndexOf('-');
 	if (separator <= 0) {
 		throw new Error(`Invalid card id: ${id}`);
@@ -34,12 +46,15 @@ export function parseCardId(id) {
  * @returns {string}
  */
 export function cardLabel(id) {
+	if (isJoker(id)) {
+		return 'Joker';
+	}
 	const { suit, rank } = parseCardId(id);
 	return `${RANK_LABELS[rank]} of ${SUIT_LABELS[suit]}`;
 }
 
 /**
- * @param {import('./constants.js').Suit} suit
+ * @param {import('./constants.js').Suit | 'joker'} suit
  * @returns {boolean}
  */
 export function isRedSuit(suit) {
@@ -47,7 +62,7 @@ export function isRedSuit(suit) {
 }
 
 /**
- * @param {import('./constants.js').Suit} suit
+ * @param {import('./constants.js').Suit | 'joker'} suit
  * @returns {string}
  */
 export function suitSymbol(suit) {
@@ -60,6 +75,8 @@ export function suitSymbol(suit) {
 			return '♦';
 		case 'clubs':
 			return '♣';
+		case 'joker':
+			return '★';
 		default:
 			return '';
 	}

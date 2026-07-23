@@ -140,14 +140,14 @@ Screenshots in `docs/evidence/`:
 
 ## Phase 5 — production deployment closure
 
-| Item | Value |
-| ---- | ----- |
-| Hosting | Cloudflare Pages |
-| Adapter | `@sveltejs/adapter-static` |
-| Production URL | https://taash-find-card.pages.dev |
-| Deploy command | `npm run deploy` (`wrangler pages deploy build --project-name=taash-find-card --branch=main`) |
-| CI | `.github/workflows/ci.yml` (npm ci → format → lint → check → unit → build → Chromium Playwright) |
+| Item             | Value                                                                                                        |
+| ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| Hosting          | Cloudflare Pages                                                                                             |
+| Adapter          | `@sveltejs/adapter-static`                                                                                   |
+| Production URL   | https://taash-find-card.pages.dev                                                                            |
+| Deploy command   | `npm run deploy` (`wrangler pages deploy build --project-name=taash-find-card --branch=main`)                |
+| CI               | `.github/workflows/ci.yml` (npm ci → format → lint → check → unit → build → Chromium Playwright)             |
 | Security headers | CSP + XCTO + Referrer-Policy + Permissions-Policy + frame-ancestors/`X-Frame-Options` — **PASS** (live HEAD) |
-| Deployed smoke | `LIVE_URL=https://taash-find-card.pages.dev npm run test:e2e:deployed` — **11/11 PASS**, exit 0 |
+| Deployed smoke   | `LIVE_URL=https://taash-find-card.pages.dev npm run test:e2e:deployed` — **11/11 PASS**, exit 0              |
 
 See `docs/deployment-report.md` for full deployment evidence.

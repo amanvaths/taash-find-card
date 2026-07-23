@@ -17,10 +17,10 @@ All gameplay assets are original to this repository, procedurally generated at r
 
 ## Runtime libraries (not visual assets)
 
-| Package                   | Role                       | License |
-| ------------------------- | -------------------------- | ------- |
-| `three`                   | Optional WebGL enhancement | MIT     |
-| Svelte / SvelteKit / Vite | Application shell          | MIT     |
+| Package                   | Role                        | License                       |
+| ------------------------- | --------------------------- | ----------------------------- |
+| `three`                   | Optional WebGL enhancement  | MIT                           |
+| Svelte / SvelteKit / Vite | Application shell           | MIT                           |
 | `wrangler`                | Cloudflare Pages deploy CLI | Apache-2.0 / MIT (Cloudflare) |
 
 ## Notes
