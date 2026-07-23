@@ -1,0 +1,60 @@
+:root {
+	--color-table: #1a3d2e;
+	--color-table-deep: #123026;
+	--color-table-edge: #0c2119;
+	--color-felt-line: #24553f;
+	--color-card-face: #f7f4ef;
+	--color-card-back: #1f3a5f;
+	--color-card-back-pattern: #2d5080;
+	--color-ink: #1a1a1a;
+	--color-ink-muted: #5a5a5a;
+	--color-suit-red: #b42318;
+	--color-suit-black: #141414;
+	--color-focus-ring: #e8b84a;
+	--color-hud: #0f241c;
+	--color-hud-text: #f2efe8;
+	--color-win: #2f6b3a;
+	--color-lose: #8a2f2f;
+	--color-correct-glow: #d4a017;
+	--color-border: #0a1a14;
+	--color-overlay: rgba(8, 18, 14, 0.72);
+
+	--radius-card: 0.55rem;
+	--radius-panel: 0.75rem;
+	--radius-button: 0.5rem;
+
+	--space-1: 0.25rem;
+	--space-2: 0.5rem;
+	--space-3: 0.75rem;
+	--space-4: 1rem;
+	--space-5: 1.5rem;
+	--space-6: 2rem;
+
+	--shadow-card: 0 0.15rem 0.35rem rgba(0, 0, 0, 0.35);
+	--shadow-raised: 0 0.35rem 0.85rem rgba(0, 0, 0, 0.4);
+
+	--font-display: 'Fraunces', 'Palatino Linotype', Palatino, 'Book Antiqua', serif;
+	--font-ui: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', sans-serif;
+	--font-mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+
+	/* Phone frame — game never stretches to full desktop width. */
+	--phone-width: 26.5rem;
+
+	--card-width: clamp(2.4rem, 5.2vw, 3.6rem);
+	--card-height: calc(var(--card-width) * 1.4);
+	--target-width: clamp(4.25rem, 22vw, 5.5rem);
+	--target-height: calc(var(--target-width) * 1.4);
+	--preview-safe: calc(var(--target-height) + var(--space-6) + env(safe-area-inset-bottom, 0px));
+
+	--motion-fast: 140ms;
+	--motion-deal: 420ms;
+	--motion-flip: 360ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--motion-fast: 1ms;
+		--motion-deal: 1ms;
+		--motion-flip: 1ms;
+	}
+}

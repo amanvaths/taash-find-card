@@ -1,0 +1,412 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	min-height: 100%;
+}
+
+body {
+	font-family: var(--font-ui);
+	color: var(--color-hud-text);
+	background: var(--color-table-edge);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	display: flex;
+	justify-content: center;
+	align-items: stretch;
+	min-height: 100dvh;
+}
+
+button {
+	font: inherit;
+}
+
+/* Mobile-first shell: phone width only — not a full desktop stretch. */
+.game-shell {
+	position: relative;
+	width: 100%;
+	max-width: var(--phone-width);
+	min-height: 100dvh;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	background: var(--color-table);
+	overflow-x: hidden;
+	overflow-y: auto;
+	/* Anchor fixed-like HUD pieces to the phone frame, not the full viewport. */
+	transform: translateZ(0);
+}
+
+.game-webgl {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 0;
+	opacity: 0.55;
+}
+
+.game-webgl canvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+.game-content {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 100%;
+	padding: var(--space-4);
+	padding-bottom: calc(var(--preview-safe) + var(--space-5));
+}
+
+.game-board {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-5);
+	width: 100%;
+	margin: 0 auto;
+}
+
+.suit-group {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+	align-items: center;
+}
+
+.suit-group__label {
+	font-family: var(--font-display);
+	font-size: 0.95rem;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: color-mix(in srgb, var(--color-hud-text) 82%, transparent);
+	align-self: flex-start;
+	width: 100%;
+}
+
+.suit-group__cards {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-2);
+	width: 100%;
+}
+
+.suit-group__row {
+	display: flex;
+	justify-content: center;
+	gap: var(--space-2);
+	width: 100%;
+}
+
+.suit-group__row .card-button {
+	width: calc((100% - (2 * var(--space-2))) / 3);
+	max-width: 4.25rem;
+	flex: 0 0 auto;
+}
+
+.card-button {
+	position: relative;
+	aspect-ratio: 5 / 7;
+	min-height: 0;
+	padding: 0;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-card);
+	background: var(--color-card-back);
+	color: var(--color-card-face);
+	box-shadow: var(--shadow-card);
+	cursor: pointer;
+	transform-style: preserve-3d;
+	transition:
+		transform var(--motion-fast) ease,
+		box-shadow var(--motion-fast) ease,
+		opacity var(--motion-fast) ease;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.card-button:focus-visible {
+	outline: 3px solid var(--color-focus-ring);
+	outline-offset: 2px;
+}
+
+.card-button:disabled {
+	cursor: default;
+}
+
+.card-button.is-dealing {
+	opacity: 0;
+	transform: translateY(-0.6rem);
+}
+
+.card-button.is-dealt {
+	opacity: 1;
+	transform: none;
+	transition-duration: var(--motion-deal);
+}
+
+.card-button.is-selected,
+.card-button.is-correct {
+	z-index: 2;
+}
+
+.card-button.is-correct {
+	box-shadow:
+		0 0 0 2px var(--color-correct-glow),
+		var(--shadow-raised);
+}
+
+.card-button.is-wrong {
+	box-shadow:
+		0 0 0 2px var(--color-lose),
+		var(--shadow-card);
+}
+
+.card-face {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 0.28rem;
+	border-radius: inherit;
+	backface-visibility: hidden;
+}
+
+.card-face--back {
+	background-color: var(--color-card-back);
+	background-image: url('/textures/card-back.svg');
+	background-size: 48px 48px;
+	background-repeat: repeat;
+}
+
+.card-face--front {
+	background: var(--color-card-face);
+	color: var(--color-suit-black);
+	transform: rotateY(180deg);
+}
+
+.card-button.is-revealed .card-inner {
+	transform: rotateY(180deg);
+}
+
+.card-inner {
+	position: absolute;
+	inset: 0;
+	transform-style: preserve-3d;
+	transition: transform var(--motion-flip) ease;
+}
+
+.card-corner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	line-height: 1;
+	font-family: var(--font-mono);
+	font-size: clamp(0.55rem, 1.8vw, 0.8rem);
+	font-weight: 700;
+}
+
+.card-corner--bl {
+	align-self: flex-start;
+	transform: rotate(180deg);
+}
+
+.card-center {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	font-size: clamp(0.9rem, 2.8vw, 1.4rem);
+	pointer-events: none;
+}
+
+.card-red {
+	color: var(--color-suit-red);
+}
+
+.card-black {
+	color: var(--color-suit-black);
+}
+
+.target-preview {
+	position: absolute;
+	left: max(var(--space-4), env(safe-area-inset-left));
+	bottom: max(var(--space-4), env(safe-area-inset-bottom));
+	z-index: 5;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+	pointer-events: none;
+}
+
+.target-preview__label {
+	font-family: var(--font-display);
+	font-size: 0.85rem;
+	letter-spacing: 0.03em;
+	color: var(--color-hud-text);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.target-preview__card {
+	width: var(--target-width);
+	height: var(--target-height);
+	border: 2px solid var(--color-focus-ring);
+	border-radius: var(--radius-card);
+	background: var(--color-card-face);
+	box-shadow: var(--shadow-raised);
+	padding: 0.4rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.target-preview__card .card-center {
+	font-size: 1.6rem;
+}
+
+.game-hud {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	width: 100%;
+	margin: 0 auto var(--space-4);
+	padding: var(--space-3) var(--space-4);
+	background: var(--color-hud);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-panel);
+	box-shadow: var(--shadow-card);
+}
+
+.game-hud__brand {
+	font-family: var(--font-display);
+	font-size: 1.25rem;
+	margin: 0;
+}
+
+.game-hud__actions {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.ui-button {
+	appearance: none;
+	border: 1px solid color-mix(in srgb, var(--color-hud-text) 25%, transparent);
+	background: color-mix(in srgb, var(--color-table) 55%, #000);
+	color: var(--color-hud-text);
+	border-radius: var(--radius-button);
+	padding: 0.45rem 0.85rem;
+	cursor: pointer;
+}
+
+.ui-button:focus-visible {
+	outline: 3px solid var(--color-focus-ring);
+	outline-offset: 2px;
+}
+
+.ui-button:hover {
+	background: color-mix(in srgb, var(--color-table) 35%, #000);
+}
+
+.status-live {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.result-dialog {
+	position: absolute;
+	inset: 0;
+	z-index: 20;
+	display: grid;
+	place-items: center;
+	background: var(--color-overlay);
+	padding: var(--space-4);
+}
+
+.result-dialog__panel {
+	width: min(24rem, 100%);
+	background: var(--color-hud);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-panel);
+	padding: var(--space-5);
+	box-shadow: var(--shadow-raised);
+	text-align: center;
+}
+
+.result-dialog__panel h2 {
+	font-family: var(--font-display);
+	margin: 0 0 var(--space-3);
+}
+
+.result-dialog__panel p {
+	margin: 0 0 var(--space-4);
+	color: color-mix(in srgb, var(--color-hud-text) 88%, transparent);
+}
+
+.result-dialog__panel[data-result='won'] h2 {
+	color: #8fd39a;
+}
+
+.result-dialog__panel[data-result='lost'] h2 {
+	color: #f0a0a0;
+}
+
+.board-pulse {
+	animation: board-pulse var(--motion-deal) ease;
+}
+
+@keyframes board-pulse {
+	0% {
+		filter: brightness(1);
+	}
+	40% {
+		filter: brightness(0.82);
+	}
+	100% {
+		filter: brightness(1);
+	}
+}
+
+/* Desktop / wide: keep a phone frame, do not stretch to full screen. */
+@media (min-width: 480px) {
+	body {
+		padding: var(--space-4) 0;
+		align-items: flex-start;
+	}
+
+	.game-shell {
+		min-height: min(100dvh - 2 * var(--space-4), 52rem);
+		max-height: calc(100dvh - 2 * var(--space-4));
+		border-radius: 1.35rem;
+		border: 1px solid color-mix(in srgb, var(--color-border) 70%, #3a5a4a);
+		box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.45);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.card-button,
+	.card-inner,
+	.board-pulse {
+		transition: none !important;
+		animation: none !important;
+	}
+}

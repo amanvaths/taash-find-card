@@ -1,0 +1,4 @@
+# Cloudflare Pages project configuration for Taash Find Card
+name = "taash-find-card"
+compatibility_date = "2026-07-24"
+pages_build_output_dir = "build"
