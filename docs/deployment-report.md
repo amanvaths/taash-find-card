@@ -37,7 +37,9 @@ npm run deploy
 
 Latest successful deploy preview alias (also promoted to production branch `main`):
 
-- https://54d6bd5e.taash-find-card.pages.dev
+- https://fd0b1f97.taash-find-card.pages.dev
+
+Repository: https://github.com/amanvaths/taash-find-card
 
 ## Adapter / routing
 
